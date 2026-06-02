@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:create": "tsx scripts/create-database.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/create-database.ts && drizzle-kit migrate",
+    "db:seed": "tsx scripts/seed-admin.ts",
+    "db:setup": "tsx scripts/create-database.ts && drizzle-kit migrate && tsx scripts/seed-admin.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

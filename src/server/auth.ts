@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { getSessionFromRequest, type SessionUser } from "@/lib/session";
 
 type GuardOptions = {
@@ -31,7 +31,7 @@ export function requireSession(context: GetServerSidePropsContext, options: Guar
   return { user, redirect: null };
 }
 
-export function redirectIfAuthenticated(context: GetServerSidePropsContext): GetServerSidePropsResult<Record<string, never>> | null {
+export function redirectIfAuthenticated(context: GetServerSidePropsContext) {
   const user = getSessionFromRequest(context.req);
   if (!user) return null;
 

@@ -1,40 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Dashboard Management Greenhouse
 
-## Getting Started
+Dashboard operasional greenhouse untuk manajemen anggota, presensi pekerjaan harian, monitoring kondisi air dan tanaman, komentar admin, dan leaderboard presensi.
 
-First, run the development server:
+## Stack
+
+- Next.js TypeScript
+- MySQL
+- Drizzle ORM
+- Drizzle Kit
+- Zod
+- mysql2
+
+## Setup
+
+1. Salin `.env.example` menjadi `.env`.
+2. Isi `DATABASE_URL` sesuai koneksi MySQL lokal.
+3. Buat database:
+
+```sql
+CREATE DATABASE greenhouse_dashboard;
+```
+
+4. Generate migration:
+
+```bash
+npm run db:generate
+```
+
+5. Jalankan migration:
+
+```bash
+npm run db:migrate
+```
+
+6. Jalankan aplikasi:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+7. Buat admin default:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run db:seed
+```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Admin default:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+- Email/username: `admin`
+- Password: `admin`
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Atau jalankan semua proses database sekaligus:
 
-## Learn More
+```bash
+npm run db:setup
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Script
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+- `npm run dev` menjalankan development server.
+- `npm run build` membuat production build.
+- `npm run lint` menjalankan ESLint.
+- `npm run db:generate` membuat SQL migration Drizzle.
+- `npm run db:migrate` menjalankan migration ke MySQL.
+- `npm run db:seed` membuat admin default.
+- `npm run db:setup` membuat database, menjalankan migration, lalu membuat admin default.
+- `npm run db:studio` membuka Drizzle Studio.

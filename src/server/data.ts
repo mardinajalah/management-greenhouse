@@ -2,7 +2,6 @@ import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
   attendances,
-  comments,
   greenhouseMonitorings,
   monitoringPhotos,
   users,

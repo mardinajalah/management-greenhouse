@@ -1,13 +1,13 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f4f7f3;
+  --foreground: #17231c;
+  --muted: #66736a;
+  --line: #dce5dd;
+  --panel: #ffffff;
+  --primary: #1f7a4d;
+  --primary-dark: #145a38;
+  --accent: #d99d2b;
+  --danger: #b42318;
 }
 
 html,
@@ -19,7 +19,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,8 +35,369 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+.button {
+  align-items: center;
+  background: var(--primary);
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  gap: 8px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+button.secondary,
+.button.secondary {
+  background: #e8eee9;
+  color: var(--foreground);
+}
+
+button.danger {
+  background: var(--danger);
+}
+
+.authPage {
+  align-items: center;
+  display: grid;
+  min-height: 100vh;
+  padding: 24px;
+  place-items: center;
+}
+
+.authCard {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(36, 64, 43, 0.12);
+  max-width: 460px;
+  padding: 28px;
+  width: 100%;
+}
+
+.authCard h1,
+.topbar h1,
+.panel h2 {
+  letter-spacing: 0;
+}
+
+.authCard h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.authCard p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.formGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.formRow {
+  display: grid;
+  gap: 6px;
+}
+
+.formRow label {
+  color: #344339;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.formRow input,
+.formRow select,
+.formRow textarea {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--foreground);
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.formRow textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.appShell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #183524;
+  color: #eef6ef;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 24px;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.brandMark {
+  align-items: center;
+  background: #daf1df;
+  border-radius: 6px;
+  color: #123421;
+  display: grid;
+  font-weight: 800;
+  height: 42px;
+  place-items: center;
+  width: 42px;
+}
+
+.brand small {
+  color: #bbcfbf;
+  display: block;
+  margin-top: 2px;
+}
+
+.navList {
+  display: grid;
+  gap: 8px;
+}
+
+.navItem {
+  border-radius: 6px;
+  color: #d8e6dc;
+  padding: 11px 12px;
+}
+
+.navItem.active,
+.navItem:hover {
+  background: #274a35;
+  color: #fff;
+}
+
+.mainPanel {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+}
+
+.topbar {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.topbar h1 {
+  font-size: 30px;
+}
+
+.eyebrow {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.accountBox {
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 14px;
+  padding: 10px 12px;
+}
+
+.accountBox a {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.panelHeader {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.panel h2 {
+  font-size: 18px;
+}
+
+.statCard {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.statCard span {
+  color: var(--muted);
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.statCard strong {
+  font-size: 32px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #425149;
+  font-size: 13px;
+}
+
+.badge {
+  background: #eaf3ec;
+  border-radius: 999px;
+  color: var(--primary-dark);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 9px;
+}
+
+.badge.warn {
+  background: #fbf0d8;
+  color: #8a5a08;
+}
+
+.message {
+  background: #e5f4e9;
+  border: 1px solid #b9dec1;
+  border-radius: 6px;
+  color: #125a31;
+  padding: 12px 14px;
+}
+
+.emptyText {
+  color: var(--muted);
+  padding: 12px 0;
+}
+
+.filters {
+  align-items: end;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.leaderboard {
+  display: grid;
+  gap: 10px;
+}
+
+.leaderboardRow {
+  align-items: center;
+  background: #f6faf7;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 50px 1fr auto;
+  padding: 12px;
+}
+
+.photoGrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.photoGrid img,
+.thumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .appShell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .mainPanel {
+    padding: 18px;
+  }
+
+  .topbar,
+  .accountBox {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .grid.two,
+  .grid.three,
+  .filters {
+    grid-template-columns: 1fr;
   }
 }
