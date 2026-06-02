@@ -42,7 +42,7 @@ export default function LoginPage({ message }: LoginPageProps) {
 
           {/* Alert Message */}
           {message && (
-            <div className='mb-6'>
+            <div className='text-red-600 text-center mb-2'>
               <Message message={message} />
             </div>
           )}
