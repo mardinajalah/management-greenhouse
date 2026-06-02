@@ -35,7 +35,7 @@ export function DashboardLayout({ title, user, children }: DashboardLayoutProps)
   return (
     <>
       <Head>
-        <title>{title} - Greenhouse</title>
+        <title>{`${title} - Greenhouse`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className="appShell">

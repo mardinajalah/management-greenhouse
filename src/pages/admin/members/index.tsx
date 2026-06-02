@@ -8,7 +8,9 @@ import { getMembers } from "@/server/data";
 
 type MembersPageProps = {
   user: SessionUser;
-  members: Awaited<ReturnType<typeof getMembers>>;
+  members: (Omit<Awaited<ReturnType<typeof getMembers>>[number], "createdAt"> & {
+    createdAt: string;
+  })[];
   query: {
     q: string;
     role: string;
@@ -157,10 +159,16 @@ export const getServerSideProps: GetServerSideProps<MembersPageProps> = async (c
     status: typeof context.query.status === "string" ? context.query.status : "",
   };
 
+  const rawMembers = await getMembers(query);
+  const members = rawMembers.map((member) => ({
+    ...member,
+    createdAt: member.createdAt.toISOString(),
+  }));
+
   return {
     props: {
       user: guard.user,
-      members: serialize(await getMembers(query)),
+      members: serialize(members),
       query,
       message: typeof context.query.message === "string" ? context.query.message : "",
     },
