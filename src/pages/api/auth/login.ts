@@ -26,8 +26,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .where(or(eq(users.email, parsed.data.identifier), eq(users.username, parsed.data.identifier)))
     .limit(1);
 
-  if (!user || !user.isActive || !verifyPassword(parsed.data.password, user.passwordHash)) {
-    redirectWithMessage(res, "/login", "Akun atau password tidak sesuai.");
+  if (!user || !user.isActive) {
+    redirectWithMessage(res, "/login", "identifier_error");
+    return;
+  }
+
+  if (!verifyPassword(parsed.data.password, user.passwordHash)) {
+    redirectWithMessage(res, "/login", "password_error");
     return;
   }
 

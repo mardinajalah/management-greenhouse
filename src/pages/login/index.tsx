@@ -8,6 +8,10 @@ type LoginPageProps = {
 };
 
 export default function LoginPage({ message }: LoginPageProps) {
+  const isIdentifierError = message === "identifier_error";
+  const isPasswordError = message === "password_error";
+  const isOtherError = message && !isIdentifierError && !isPasswordError;
+
   return (
     <>
       <Head>
@@ -40,9 +44,9 @@ export default function LoginPage({ message }: LoginPageProps) {
             <p className='text-slate-500 text-sm mt-2 leading-relaxed'>Kelola presensi dan monitoring kondisi greenhouse dalam satu genggaman.</p>
           </div>
 
-          {/* Alert Message */}
-          {message && (
-            <div className='text-red-600 text-center mb-2'>
+          {/* Alert Message Umum */}
+          {isOtherError && (
+            <div className='text-red-600 text-center mb-4'>
               <Message message={message} />
             </div>
           )}
@@ -66,8 +70,15 @@ export default function LoginPage({ message }: LoginPageProps) {
                 autoComplete='username'
                 required
                 placeholder='Masukkan username Anda'
-                className='w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 placeholder:text-slate-400'
+                className={`w-full px-4 py-3 rounded-xl border ${
+                  isIdentifierError 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-slate-200 focus:ring-emerald-500'
+                } focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 placeholder:text-slate-400`}
               />
+              {isIdentifierError && (
+                <span className="text-red-500 text-xs mt-1 block ml-1">Email atau username tidak terdaftar atau tidak aktif.</span>
+              )}
             </div>
 
             <div className='space-y-1.5'>
@@ -84,8 +95,15 @@ export default function LoginPage({ message }: LoginPageProps) {
                 autoComplete='current-password'
                 required
                 placeholder='••••••••'
-                className='w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 placeholder:text-slate-400'
+                className={`w-full px-4 py-3 rounded-xl border ${
+                  isPasswordError 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-slate-200 focus:ring-emerald-500'
+                } focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 placeholder:text-slate-400`}
               />
+              {isPasswordError && (
+                <span className="text-red-500 text-xs mt-1 block ml-1">Password yang Anda masukkan salah.</span>
+              )}
             </div>
 
             <button
