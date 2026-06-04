@@ -62,7 +62,7 @@ export function DashboardLayout({ title, user, children }: DashboardLayoutProps)
       return;
     }
 
-    setIsMobileSidebarOpen(true);
+    setIsMobileSidebarOpen((open) => !open);
   };
 
   useEffect(() => {
