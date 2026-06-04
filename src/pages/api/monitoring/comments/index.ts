@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const module = parsed.data.module as MonitoringModule;
+  const monitoringModule = parsed.data.module as MonitoringModule;
   const recordId = parsed.data.recordId;
 
   await db.insert(monitoringComments).values({
-    module,
+    module: monitoringModule,
     recordId,
     adminId: session.id,
     comment: parsed.data.comment,
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   redirectWithMessage(
     res,
-    monitoringDetailPath(module, recordId),
+    monitoringDetailPath(monitoringModule, recordId),
     "Komentar berhasil ditambahkan.",
   );
 }
