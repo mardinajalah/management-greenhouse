@@ -76,7 +76,7 @@ export function DashboardLayout({ title, user, children }: DashboardLayoutProps)
         {/* Main Content */}
         <main className='flex-1 md:ml-64 flex flex-col'>
           {/* Topbar */}
-          <header className='h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10'>
+          <header className='h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0'>
             <div>
               <span className='text-xs font-bold text-emerald-600 uppercase tracking-wider'>{user.role === 'admin' ? 'Administrator' : 'Employee Portal'}</span>
               <h2 className='text-xl font-bold text-slate-800'>{title}</h2>
