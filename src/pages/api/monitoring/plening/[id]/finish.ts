@@ -5,8 +5,9 @@ import { pleningSchedules } from "@/db/schema";
 import { canCompletePlening } from "@/lib/plening";
 import { formBody } from "@/lib/request";
 import { parseForm, pleningFinishSchema } from "@/lib/validation";
-import { redirectWithMessage, requireApiSession } from "@/server/api";
+import { monitoringDetailPath } from "@/lib/monitoring-modules";
 import { syncDuePleningStatuses } from "@/lib/monitoring-data";
+import { redirectWithMessage, requireApiSession } from "@/server/api";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = requireApiSession(req, res, "user");
@@ -50,5 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .set({ status: "selesai", updatedAt: new Date() })
     .where(eq(pleningSchedules.id, parsed.data.id));
 
-  redirectWithMessage(res, "/user/monitorings/plening", "Plening ditandai selesai.");
+  redirectWithMessage(
+    res,
+    monitoringDetailPath("plening", parsed.data.id),
+    "Plening ditandai selesai.",
+  );
 }

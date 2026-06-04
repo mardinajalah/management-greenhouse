@@ -9,12 +9,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guard = requireSession(context);
   if (guard.redirect) return { redirect: guard.redirect };
 
-  const destination =
-    guard.user?.role === "admin" ? "/admin/monitorings" : "/user/monitorings";
+  const base = guard.user?.role === "admin" ? "/admin/monitorings" : "/user/monitorings";
 
   return {
     redirect: {
-      destination,
+      destination: `${base}?message=${encodeURIComponent("Pilih modul monitoring (tanaman, air, atau plening) dari halaman utama.")}`,
       permanent: false,
     },
   };

@@ -32,6 +32,7 @@ export const pleningTypeEnum = mysqlEnum("plening_type", [
 ]);
 
 export const pleningStatusEnum = mysqlEnum("plening_status", ["menunggu", "siap", "selesai"]);
+export const monitoringModuleEnum = mysqlEnum("module", ["plant", "water", "plening"]);
 
 export const users = mysqlTable(
   "users",
@@ -144,6 +145,24 @@ export const pleningSchedules = mysqlTable(
   }),
 );
 
+export const monitoringComments = mysqlTable(
+  "monitoring_comments",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    module: monitoringModuleEnum.notNull(),
+    recordId: int("record_id").notNull(),
+    adminId: int("admin_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    comment: text("comment").notNull(),
+    createdAt: datetime("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    recordIdx: index("monitoring_comments_record_idx").on(table.module, table.recordId),
+    adminIdx: index("monitoring_comments_admin_idx").on(table.adminId),
+  }),
+);
+
 export const greenhouseMonitorings = mysqlTable(
   "greenhouse_monitorings",
   {
@@ -210,8 +229,16 @@ export const usersRelations = relations(users, ({ many }) => ({
   plantConditions: many(plantConditions),
   waterConditions: many(waterConditions),
   pleningSchedules: many(pleningSchedules),
+  monitoringCommentsAuthored: many(monitoringComments),
   monitorings: many(greenhouseMonitorings),
   comments: many(comments),
+}));
+
+export const monitoringCommentsRelations = relations(monitoringComments, ({ one }) => ({
+  admin: one(users, {
+    fields: [monitoringComments.adminId],
+    references: [users.id],
+  }),
 }));
 
 export const plantConditionsRelations = relations(plantConditions, ({ one }) => ({
@@ -276,3 +303,4 @@ export type GreenhouseMonitoring = typeof greenhouseMonitorings.$inferSelect;
 export type PlantCondition = typeof plantConditions.$inferSelect;
 export type WaterCondition = typeof waterConditions.$inferSelect;
 export type PleningSchedule = typeof pleningSchedules.$inferSelect;
+export type MonitoringComment = typeof monitoringComments.$inferSelect;

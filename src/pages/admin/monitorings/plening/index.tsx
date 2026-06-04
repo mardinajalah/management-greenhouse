@@ -1,8 +1,10 @@
+import Link from "next/link";
 import type { GetServerSideProps } from "next";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { MonitoringBackLink } from "@/components/MonitoringBackLink";
 import { formatAttendanceDate } from "@/lib/format";
 import { getPleningScheduleList } from "@/lib/monitoring-data";
+import { monitoringDetailPath } from "@/lib/monitoring-modules";
 import { isPleningNotificationDue, pleningStatusLabels, pleningTypeLabels, todayDateString } from "@/lib/plening";
 import { serialize } from "@/lib/serialize";
 import type { SessionUser } from "@/lib/session";
@@ -34,6 +36,7 @@ export default function AdminPleningPage({ user, records, today }: Props) {
                   <th className="px-6 py-4">Ruangan</th>
                   <th className="px-6 py-4">Jenis</th>
                   <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -57,6 +60,14 @@ export default function AdminPleningPage({ user, records, today }: Props) {
                         >
                           {pleningStatusLabels[item.status] ?? item.status}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <Link
+                          href={monitoringDetailPath("plening", item.id)}
+                          className="inline-flex px-3 py-1.5 text-xs font-semibold rounded-lg border border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                        >
+                          Detail
+                        </Link>
                       </td>
                     </tr>
                   );

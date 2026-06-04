@@ -5,6 +5,7 @@ import { Message } from "@/components/Message";
 import { MonitoringBackLink } from "@/components/MonitoringBackLink";
 import { formatAttendanceDate } from "@/lib/format";
 import { getWaterConditionList } from "@/lib/monitoring-data";
+import { monitoringDetailPath } from "@/lib/monitoring-modules";
 import { serialize } from "@/lib/serialize";
 import type { SessionUser } from "@/lib/session";
 import { requireSession } from "@/server/auth";
@@ -49,6 +50,7 @@ export default function UserWaterConditionsPage({ user, records, message }: Prop
                   <th className="px-4 py-3">PH Down (ml)</th>
                   <th className="px-4 py-3">pH akhir</th>
                   <th className="px-4 py-3">Suhu (°C)</th>
+                  <th className="px-4 py-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -63,6 +65,14 @@ export default function UserWaterConditionsPage({ user, records, message }: Prop
                     <td className="px-4 py-3">{item.phDownMl}</td>
                     <td className="px-4 py-3">{item.finalPh}</td>
                     <td className="px-4 py-3">{item.waterTemperature}</td>
+                    <td className="px-4 py-3 text-center">
+                      <Link
+                        href={monitoringDetailPath("water", item.id)}
+                        className="inline-flex px-3 py-1.5 text-xs font-semibold rounded-lg border border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                      >
+                        Detail
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

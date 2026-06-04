@@ -5,6 +5,7 @@ import { Message } from "@/components/Message";
 import { MonitoringBackLink } from "@/components/MonitoringBackLink";
 import { formatAttendanceDate } from "@/lib/format";
 import { getDuePleningNotifications, getPleningScheduleList } from "@/lib/monitoring-data";
+import { monitoringDetailPath } from "@/lib/monitoring-modules";
 import {
   canCompletePlening,
   isPleningNotificationDue,
@@ -91,28 +92,34 @@ export default function UserPleningPage({ user, records, duePlenings, today, mes
                           {pleningStatusLabels[item.status] ?? item.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-center">
-                        {item.status === "selesai" ? (
-                          <span className="text-xs text-slate-300">—</span>
-                        ) : canFinish ? (
-                          <form action={`/api/monitoring/plening/${item.id}/finish`} method="post">
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap items-center justify-center gap-2">
+                          <Link
+                            href={monitoringDetailPath("plening", item.id)}
+                            className="inline-flex px-3 py-1.5 text-xs font-semibold rounded-lg border border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                          >
+                            Detail
+                          </Link>
+                          {item.status === "selesai" ? null : canFinish ? (
+                            <form action={`/api/monitoring/plening/${item.id}/finish`} method="post">
+                              <button
+                                type="submit"
+                                className="bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg font-semibold hover:bg-black"
+                              >
+                                Selesai
+                              </button>
+                            </form>
+                          ) : (
                             <button
-                              type="submit"
-                              className="bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg font-semibold hover:bg-black"
+                              type="button"
+                              disabled
+                              title="Tombol aktif setelah tanggal plening tiba"
+                              className="bg-slate-100 text-slate-400 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-not-allowed"
                             >
                               Selesai
                             </button>
-                          </form>
-                        ) : (
-                          <button
-                            type="button"
-                            disabled
-                            title="Tombol aktif setelah tanggal plening tiba"
-                            className="bg-slate-100 text-slate-400 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-not-allowed"
-                          >
-                            Selesai
-                          </button>
-                        )}
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );

@@ -91,6 +91,12 @@ export const pleningFinishSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
+export const monitoringCommentSchema = z.object({
+  module: z.enum(["plant", "water", "plening"]),
+  recordId: z.coerce.number().int().positive(),
+  comment: z.string().min(2, "Komentar minimal 2 karakter"),
+});
+
 export function parseForm<T extends z.ZodTypeAny>(schema: T, data: unknown) {
   const result = schema.safeParse(data);
   if (result.success) {

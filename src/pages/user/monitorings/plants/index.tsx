@@ -6,6 +6,7 @@ import { Message } from "@/components/Message";
 import { MonitoringBackLink } from "@/components/MonitoringBackLink";
 import { formatAttendanceDate } from "@/lib/format";
 import { getPlantConditionList } from "@/lib/monitoring-data";
+import { monitoringDetailPath } from "@/lib/monitoring-modules";
 import { serialize } from "@/lib/serialize";
 import type { SessionUser } from "@/lib/session";
 import { requireSession } from "@/server/auth";
@@ -46,6 +47,7 @@ export default function UserPlantConditionsPage({ user, records, message }: Prop
                   <th className="px-6 py-4">Usia</th>
                   <th className="px-6 py-4">Deskripsi</th>
                   <th className="px-6 py-4">Foto</th>
+                  <th className="px-6 py-4 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -59,6 +61,14 @@ export default function UserPlantConditionsPage({ user, records, message }: Prop
                     <td className="px-6 py-4 text-sm text-slate-500 max-w-xs line-clamp-2">{item.description}</td>
                     <td className="px-6 py-4">
                       <ImageLightbox src={item.photoUrl} alt={`Foto ${item.plantType}`} />
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Link
+                        href={monitoringDetailPath("plant", item.id)}
+                        className="inline-flex px-3 py-1.5 text-xs font-semibold rounded-lg border border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                      >
+                        Detail
+                      </Link>
                     </td>
                   </tr>
                 ))}
