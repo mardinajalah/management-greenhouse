@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { GetServerSideProps } from 'next';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Leaderboard } from '@/components/Leaderboard';
@@ -28,12 +27,6 @@ export default function UserDashboard({ user, activeAttendances, leaderboard }: 
                 <h2 className='text-lg font-bold text-slate-800'>Presensi Pekerjaan</h2>
                 <p className='text-sm text-slate-500'>Pekerjaan yang sedang Anda kerjakan saat ini.</p>
               </div>
-              <Link
-                href='/user/attendances/new'
-                className='bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-md shadow-emerald-100'
-              >
-                + Mulai Kerja
-              </Link>
             </div>
 
             <div className='p-6'>

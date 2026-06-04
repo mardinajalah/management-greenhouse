@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Message } from "@/components/Message";
 import type { SessionUser } from "@/lib/session";
 import { requireSession } from "@/server/auth";
+import { MonitoringBackLink } from "@/components/MonitoringBackLink";
 
 type NewAttendancePageProps = {
   user: SessionUser;
@@ -36,6 +37,7 @@ export default function NewAttendancePage({ user, today, message }: NewAttendanc
   return (
     <DashboardLayout title="Input Presensi Baru" user={user}>
       <div className="max-w-3xl mx-auto space-y-6">
+        <MonitoringBackLink href="/user/attendances" />
         <Message message={message} />
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
