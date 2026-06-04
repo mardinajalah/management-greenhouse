@@ -1,5 +1,6 @@
 import type { GetServerSideProps } from 'next';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { ImageLightbox } from '@/components/ImageLightbox';
 import { serialize } from '@/lib/serialize';
 import type { SessionUser } from '@/lib/session';
 import { requireSession } from '@/server/auth';
@@ -105,6 +106,7 @@ export default function AdminAttendancesPage({ user, attendances, totals, query 
                     <th className='px-6 py-4'>Anggota</th>
                     <th className='px-6 py-4'>Pekerjaan</th>
                     <th className='px-6 py-4'>Jam Kerja</th>
+                    <th className='px-6 py-4'>Foto</th>
                     <th className='px-6 py-4 text-center'>Status</th>
                   </tr>
                 </thead>
@@ -127,6 +129,13 @@ export default function AdminAttendancesPage({ user, attendances, totals, query 
                           <span>→</span>
                           <span className={item.checkOutTime ? 'bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-bold' : 'text-emerald-500 animate-pulse font-bold'}>{item.checkOutTime || 'Aktif'}</span>
                         </div>
+                      </td>
+                      <td className='px-6 py-4'>
+                        {item.photoUrl ? (
+                          <ImageLightbox src={item.photoUrl} alt={`Foto presensi ${item.workTitle}`} />
+                        ) : (
+                          <span className='text-xs text-slate-300'>—</span>
+                        )}
                       </td>
                       <td className='px-6 py-4 text-center'>
                         <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-tighter border ${getStatusStyle(item.status)}`}>{item.status.replace('_', ' ')}</span>

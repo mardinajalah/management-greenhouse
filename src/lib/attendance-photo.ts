@@ -1,0 +1,38 @@
+import { randomUUID } from "crypto";
+import { mkdir, writeFile } from "fs/promises";
+import path from "path";
+
+export const MAX_ATTENDANCE_PHOTO_SIZE = 2 * 1024 * 1024;
+
+const allowedTypes: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
+
+export function parseAttendancePhotoInput(photoData: string, photoType: string) {
+  const extension = allowedTypes[photoType];
+  if (!extension) {
+    return { error: "Tipe foto harus JPG, PNG, atau WEBP." as const };
+  }
+
+  const base64 = photoData.replace(/^data:image\/[a-zA-Z0-9.+-]+;base64,/, "");
+  const buffer = Buffer.from(base64, "base64");
+
+  if (buffer.byteLength > MAX_ATTENDANCE_PHOTO_SIZE) {
+    return { error: "Ukuran foto maksimal 2MB." as const };
+  }
+
+  return { buffer, extension };
+}
+
+export async function saveAttendancePhoto(buffer: Buffer, extension: string) {
+  const uploadDir = path.join(process.cwd(), "public", "uploads", "attendances");
+  await mkdir(uploadDir, { recursive: true });
+
+  const filename = `${Date.now()}-${randomUUID()}.${extension}`;
+  const photoUrl = `/uploads/attendances/${filename}`;
+  await writeFile(path.join(uploadDir, filename), buffer);
+
+  return photoUrl;
+}

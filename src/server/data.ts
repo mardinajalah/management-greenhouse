@@ -1,11 +1,7 @@
-import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
+import { and, count, desc, eq, like, or } from "drizzle-orm";
 import { db } from "@/db/client";
-import {
-  attendances,
-  greenhouseMonitorings,
-  monitoringPhotos,
-  users,
-} from "@/db/schema";
+import { getMonitoringRecordCount } from "@/lib/monitoring-data";
+import { attendances, users } from "@/db/schema";
 
 export async function hasAdmin() {
   const result = await db.select({ total: count() }).from(users).where(eq(users.role, "admin"));
@@ -13,16 +9,16 @@ export async function hasAdmin() {
 }
 
 export async function getDashboardStats() {
-  const [memberRows, attendanceRows, monitoringRows] = await Promise.all([
+  const [memberRows, attendanceRows, monitoringTotal] = await Promise.all([
     db.select({ total: count() }).from(users),
     db.select({ total: count() }).from(attendances),
-    db.select({ total: count() }).from(greenhouseMonitorings),
+    getMonitoringRecordCount(),
   ]);
 
   return {
     members: Number(memberRows[0]?.total ?? 0),
     attendances: Number(attendanceRows[0]?.total ?? 0),
-    monitorings: Number(monitoringRows[0]?.total ?? 0),
+    monitorings: monitoringTotal,
   };
 }
 
@@ -80,6 +76,24 @@ export async function getUserAttendances(userId: number) {
     .orderBy(desc(attendances.attendanceDate), desc(attendances.createdAt));
 }
 
+export async function getMemberCompletedAttendances(userId: number) {
+  return db
+    .select({
+      id: attendances.id,
+      attendanceDate: attendances.attendanceDate,
+      workTitle: attendances.workTitle,
+      workDescription: attendances.workDescription,
+      checkInTime: attendances.checkInTime,
+      checkOutTime: attendances.checkOutTime,
+      photoUrl: attendances.photoUrl,
+      userName: users.name,
+    })
+    .from(attendances)
+    .innerJoin(users, eq(attendances.userId, users.id))
+    .where(and(eq(attendances.userId, userId), eq(attendances.status, "selesai")))
+    .orderBy(desc(attendances.attendanceDate), desc(attendances.createdAt));
+}
+
 export async function getAdminAttendances(params: { date?: string; q?: string; status?: string }) {
   const conditions = [];
   if (params.date) conditions.push(eq(attendances.attendanceDate, params.date));
@@ -95,7 +109,7 @@ export async function getAdminAttendances(params: { date?: string; q?: string; s
       checkInTime: attendances.checkInTime,
       checkOutTime: attendances.checkOutTime,
       status: attendances.status,
-      note: attendances.note,
+      photoUrl: attendances.photoUrl,
       userName: users.name,
     })
     .from(attendances)
@@ -114,50 +128,6 @@ export async function getAttendanceTotals() {
     .leftJoin(attendances, eq(attendances.userId, users.id))
     .groupBy(users.id, users.name)
     .orderBy(desc(count(attendances.id)));
-}
-
-export async function getMonitoringList() {
-  return db
-    .select({
-      id: greenhouseMonitorings.id,
-      monitoringDate: greenhouseMonitorings.monitoringDate,
-      waterCondition: greenhouseMonitorings.waterCondition,
-      waterPh: greenhouseMonitorings.waterPh,
-      plantCondition: greenhouseMonitorings.plantCondition,
-      pestCondition: greenhouseMonitorings.pestCondition,
-      userName: users.name,
-      photoUrl: sql<string>`MIN(${monitoringPhotos.photoUrl})`,
-    })
-    .from(greenhouseMonitorings)
-    .innerJoin(users, eq(greenhouseMonitorings.userId, users.id))
-    .leftJoin(monitoringPhotos, eq(monitoringPhotos.monitoringId, greenhouseMonitorings.id))
-    .groupBy(
-      greenhouseMonitorings.id,
-      greenhouseMonitorings.monitoringDate,
-      greenhouseMonitorings.waterCondition,
-      greenhouseMonitorings.waterPh,
-      greenhouseMonitorings.plantCondition,
-      greenhouseMonitorings.pestCondition,
-      users.name,
-    )
-    .orderBy(desc(greenhouseMonitorings.monitoringDate), desc(greenhouseMonitorings.createdAt));
-}
-
-export async function getMonitoringDetail(id: number) {
-  const monitoring = await db.query.greenhouseMonitorings.findFirst({
-    where: eq(greenhouseMonitorings.id, id),
-    with: {
-      user: true,
-      photos: true,
-      comments: {
-        with: {
-          admin: true,
-        },
-      },
-    },
-  });
-
-  return monitoring ?? null;
 }
 
 export async function getUserById(id: number) {

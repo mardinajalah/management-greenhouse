@@ -31,11 +31,20 @@ export const attendanceSchema = z
     checkInTime: timeSchema,
     checkOutTime: timeSchema.optional().or(z.literal("")),
     status: z.enum(["sedang_dikerjakan", "selesai", "izin", "sakit", "alpha"]),
-    note: z.string().optional().or(z.literal("")),
+    photoData: z.string().optional().or(z.literal("")),
+    photoName: z.string().optional().or(z.literal("")),
+    photoType: z.string().optional().or(z.literal("")),
   })
   .refine(
     (data) => !data.checkOutTime || data.checkOutTime >= data.checkInTime,
     "Jam keluar tidak boleh lebih awal dari jam masuk",
+  )
+  .refine(
+    (data) => {
+      if (!data.photoData) return true;
+      return Boolean(data.photoName && data.photoType?.startsWith("image/"));
+    },
+    { message: "Data foto tidak lengkap atau format tidak valid." },
   );
 
 export const finishAttendanceSchema = z
@@ -45,25 +54,41 @@ export const finishAttendanceSchema = z
   })
   .passthrough();
 
-export const monitoringSchema = z.object({
-  monitoringDate: dateSchema,
-  waterCondition: z.string().min(2, "Kondisi air wajib diisi"),
-  waterPh: z.coerce.number().min(0).max(14),
-  waterTemperature: z.coerce.number(),
-  airTemperature: z.coerce.number(),
-  humidity: z.coerce.number().min(0).max(100),
-  plantCondition: z.string().min(2, "Kondisi tanaman wajib diisi"),
-  pestCondition: z.string().min(2, "Kondisi hama wajib diisi"),
-  notes: z.string().optional().or(z.literal("")),
-  photoData: z.string().min(1, "Foto dokumentasi wajib diunggah"),
+const requiredPhotoSchema = z.object({
+  photoData: z.string().min(1, "Foto wajib diunggah"),
   photoName: z.string().min(1),
   photoType: z.string().startsWith("image/", "File harus berupa gambar"),
-  caption: z.string().optional().or(z.literal("")),
 });
 
-export const commentSchema = z.object({
-  monitoringId: z.coerce.number().int().positive(),
-  comment: z.string().min(2, "Komentar minimal 2 karakter"),
+export const plantConditionSchema = z
+  .object({
+    recordDate: dateSchema,
+    plantType: z.string().min(2, "Jenis tanaman minimal 2 karakter"),
+    description: z.string().min(2, "Deskripsi wajib diisi"),
+    plantAge: z.string().min(1, "Usia tanaman wajib diisi"),
+  })
+  .extend(requiredPhotoSchema.shape);
+
+export const waterConditionSchema = z.object({
+  recordDate: dateSchema,
+  roomNumber: z.coerce.number().int().min(1, "Ruangan wajib diisi"),
+  initialPpm: z.coerce.number().int().min(150).max(3000),
+  nutrientMl: z.coerce.number().min(0),
+  finalPpm: z.coerce.number().int().min(150).max(3000),
+  initialPh: z.coerce.number().min(1).max(10),
+  phDownMl: z.coerce.number().min(0),
+  finalPh: z.coerce.number().min(1).max(10),
+  waterTemperature: z.coerce.number().min(10).max(40),
+});
+
+export const pleningScheduleSchema = z.object({
+  pleningDate: dateSchema,
+  roomNumber: z.coerce.number().int().min(1, "Ruangan wajib diisi"),
+  pleningType: z.enum(["sprei_hama", "sprei_penyakit", "polinasi", "wiwil", "panen"]),
+});
+
+export const pleningFinishSchema = z.object({
+  id: z.coerce.number().int().positive(),
 });
 
 export function parseForm<T extends z.ZodTypeAny>(schema: T, data: unknown) {

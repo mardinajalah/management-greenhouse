@@ -1,0 +1,51 @@
+rol user 
+
+dasboard
+- tambahkan detail di liderbioard
+- melihat apsensi anggota jika mengklik tombol detail di nama anggota lain
+- nama
+- taggal
+- jam masuk
+- jam keluar
+- gambar ketika diklik perbesar
+- keterangan pekerjaan
+
+presensi
+- hapus input catatan singkat
+- ubah deskripsi detal jadi deskripsi (opsional)
+- tambahkan inputan gambar saat input presensi (obsional)
+- jika kilik gambar maka muncul gambar layar penuh
+- hapus tombol aksi selesai dari tabel absensi
+
+monitoring
+buatkan 3 item
+- item 1 kondisi tanaman
+  - tabel kondisi tanaman
+  - tambah kondisi tanaman
+    - tanggal
+    - jenis tanaman
+    - inputan foto (wajib)
+    - seskripsi (wajib)
+    - usia tanaman
+- item 2 kondisi air
+  - tabel kondisi air
+  - tambah kondisi air
+    - tanggal
+    - ruangan berapa
+    - konsiai awal ppm (150 - 3000) (PPM)
+    - tambah nutrisi air (mili liter)
+    - hasil akhir ppm setelah di tambahkan nutrisi air (PPM)
+    - kondisi awal PH air (1 - 10) (PH)
+    - tambahan PH Down Air (mili liter) 
+    - hasil akhir PH setelah di tambah PH Down (PH)
+    - suhu air (10 - 40)
+
+- item 3 jadwal plening
+  - tabel jadwal plening
+   - sataus plening
+   - tombol selesai plening diable ketika notifikasinya belum muncul
+  - tambah jadwal plening
+    - tanggal plening
+    - ruangan berapa
+    - jenis plening (sprei hama, sprei penyakit, polinasi, wiwil, panen)
+  - berikan fitur notifikasi ketika plening sudah dibuat sesuikan dengan tanggal plenningnya

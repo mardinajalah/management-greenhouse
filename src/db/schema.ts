@@ -23,6 +23,16 @@ export const attendanceStatusEnum = mysqlEnum("status", [
   "alpha",
 ]);
 
+export const pleningTypeEnum = mysqlEnum("plening_type", [
+  "sprei_hama",
+  "sprei_penyakit",
+  "polinasi",
+  "wiwil",
+  "panen",
+]);
+
+export const pleningStatusEnum = mysqlEnum("plening_status", ["menunggu", "siap", "selesai"]);
+
 export const users = mysqlTable(
   "users",
   {
@@ -58,6 +68,7 @@ export const attendances = mysqlTable(
     checkOutTime: time("check_out_time"),
     status: attendanceStatusEnum.notNull().default("sedang_dikerjakan"),
     note: varchar("note", { length: 255 }),
+    photoUrl: varchar("photo_url", { length: 255 }),
     createdAt: datetime("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: datetime("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
@@ -65,6 +76,71 @@ export const attendances = mysqlTable(
     userIdx: index("attendances_user_id_idx").on(table.userId),
     dateIdx: index("attendances_date_idx").on(table.attendanceDate),
     statusIdx: index("attendances_status_idx").on(table.status),
+  }),
+);
+
+export const plantConditions = mysqlTable(
+  "plant_conditions",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    recordDate: date("record_date", { mode: "string" }).notNull(),
+    plantType: varchar("plant_type", { length: 120 }).notNull(),
+    description: text("description").notNull(),
+    plantAge: varchar("plant_age", { length: 80 }).notNull(),
+    photoUrl: varchar("photo_url", { length: 255 }).notNull(),
+    createdAt: datetime("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    userIdx: index("plant_conditions_user_id_idx").on(table.userId),
+    dateIdx: index("plant_conditions_date_idx").on(table.recordDate),
+  }),
+);
+
+export const waterConditions = mysqlTable(
+  "water_conditions",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    recordDate: date("record_date", { mode: "string" }).notNull(),
+    roomNumber: int("room_number").notNull(),
+    initialPpm: int("initial_ppm").notNull(),
+    nutrientMl: decimal("nutrient_ml", { precision: 8, scale: 2 }).notNull(),
+    finalPpm: int("final_ppm").notNull(),
+    initialPh: decimal("initial_ph", { precision: 4, scale: 2 }).notNull(),
+    phDownMl: decimal("ph_down_ml", { precision: 8, scale: 2 }).notNull(),
+    finalPh: decimal("final_ph", { precision: 4, scale: 2 }).notNull(),
+    waterTemperature: decimal("water_temperature", { precision: 5, scale: 2 }).notNull(),
+    createdAt: datetime("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    userIdx: index("water_conditions_user_id_idx").on(table.userId),
+    dateIdx: index("water_conditions_date_idx").on(table.recordDate),
+  }),
+);
+
+export const pleningSchedules = mysqlTable(
+  "plening_schedules",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    pleningDate: date("plening_date", { mode: "string" }).notNull(),
+    roomNumber: int("room_number").notNull(),
+    pleningType: pleningTypeEnum.notNull(),
+    status: pleningStatusEnum.notNull().default("menunggu"),
+    createdAt: datetime("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: datetime("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    userIdx: index("plening_schedules_user_id_idx").on(table.userId),
+    dateIdx: index("plening_schedules_date_idx").on(table.pleningDate),
+    statusIdx: index("plening_schedules_status_idx").on(table.status),
   }),
 );
 
@@ -131,8 +207,32 @@ export const comments = mysqlTable(
 
 export const usersRelations = relations(users, ({ many }) => ({
   attendances: many(attendances),
+  plantConditions: many(plantConditions),
+  waterConditions: many(waterConditions),
+  pleningSchedules: many(pleningSchedules),
   monitorings: many(greenhouseMonitorings),
   comments: many(comments),
+}));
+
+export const plantConditionsRelations = relations(plantConditions, ({ one }) => ({
+  user: one(users, {
+    fields: [plantConditions.userId],
+    references: [users.id],
+  }),
+}));
+
+export const waterConditionsRelations = relations(waterConditions, ({ one }) => ({
+  user: one(users, {
+    fields: [waterConditions.userId],
+    references: [users.id],
+  }),
+}));
+
+export const pleningSchedulesRelations = relations(pleningSchedules, ({ one }) => ({
+  user: one(users, {
+    fields: [pleningSchedules.userId],
+    references: [users.id],
+  }),
 }));
 
 export const attendancesRelations = relations(attendances, ({ one }) => ({
@@ -173,3 +273,6 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Attendance = typeof attendances.$inferSelect;
 export type GreenhouseMonitoring = typeof greenhouseMonitorings.$inferSelect;
+export type PlantCondition = typeof plantConditions.$inferSelect;
+export type WaterCondition = typeof waterConditions.$inferSelect;
+export type PleningSchedule = typeof pleningSchedules.$inferSelect;

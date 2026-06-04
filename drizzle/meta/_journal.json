@@ -8,6 +8,20 @@
       "when": 1780422268938,
       "tag": "0000_closed_bug",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1780530138530,
+      "tag": "0001_lethal_ser_duncan",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1780531060267,
+      "tag": "0002_concerned_vin_gonzales",
+      "breakpoints": true
     }
   ]
 }

@@ -95,7 +95,10 @@ export default function UserDashboard({ user, activeAttendances, leaderboard }: 
         {/* Right Column: Leaderboard / Sidebar Content */}
         <section className='lg:col-span-1'>
           <div className='sticky top-28'>
-            <Leaderboard items={leaderboard.map((item) => ({ ...item, total: Number(item.total) }))} />
+            <Leaderboard
+              items={leaderboard.map((item) => ({ ...item, total: Number(item.total) }))}
+              currentUserId={user.id}
+            />
           </div>
         </section>
       </div>

@@ -50,7 +50,9 @@ export function DashboardLayout({ title, user, children }: DashboardLayoutProps)
 
           <nav className='flex-1 px-4 py-4 space-y-1'>
             {nav.map((item) => {
-              const isActive = router.pathname === item.href;
+              const isActive =
+                router.pathname === item.href ||
+                (item.href.endsWith("/monitorings") && router.pathname.startsWith(`${item.href}/`));
               return (
                 <Link
                   key={item.href}
