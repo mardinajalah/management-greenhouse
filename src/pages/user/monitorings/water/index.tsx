@@ -42,6 +42,7 @@ export default function UserWaterConditionsPage({ user, records, message }: Prop
               <thead>
                 <tr className="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                   <th className="px-4 py-3">Tanggal</th>
+                  <th className="px-4 py-3">Oleh</th>
                   <th className="px-4 py-3">Ruangan</th>
                   <th className="px-4 py-3">PPM awal</th>
                   <th className="px-4 py-3">Nutrisi (ml)</th>
@@ -57,6 +58,7 @@ export default function UserWaterConditionsPage({ user, records, message }: Prop
                 {records.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/50">
                     <td className="px-4 py-3 font-medium text-slate-700">{formatAttendanceDate(item.recordDate)}</td>
+                    <td className="px-4 py-3 text-slate-600">{item.userName}</td>
                     <td className="px-4 py-3">{item.roomNumber}</td>
                     <td className="px-4 py-3">{item.initialPpm}</td>
                     <td className="px-4 py-3">{item.nutrientMl}</td>
@@ -95,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   return {
     props: {
       user: guard.user,
-      records: serialize(await getWaterConditionList(guard.user.id)),
+      records: serialize(await getWaterConditionList()),
       message: typeof context.query.message === "string" ? context.query.message : "",
     },
   };

@@ -61,6 +61,7 @@ export default function UserPleningPage({ user, records, duePlenings, today, mes
               <thead>
                 <tr className="bg-slate-50 text-slate-400 uppercase text-[11px] font-bold tracking-wider">
                   <th className="px-6 py-4">Tanggal plening</th>
+                  <th className="px-6 py-4">Dibuat Oleh</th>
                   <th className="px-6 py-4">Ruangan</th>
                   <th className="px-6 py-4">Jenis</th>
                   <th className="px-6 py-4">Status</th>
@@ -77,6 +78,7 @@ export default function UserPleningPage({ user, records, duePlenings, today, mes
                       <td className="px-6 py-4 text-sm font-semibold text-slate-700">
                         {formatAttendanceDate(item.pleningDate)}
                       </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{item.userName}</td>
                       <td className="px-6 py-4 text-sm">{item.roomNumber}</td>
                       <td className="px-6 py-4 text-sm">{pleningTypeLabels[item.pleningType] ?? item.pleningType}</td>
                       <td className="px-6 py-4">
@@ -141,13 +143,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   const guard = requireSession(context, { role: "user" });
   if (guard.redirect || !guard.user) return { redirect: guard.redirect! };
 
-  const userId = guard.user.id;
-
   return {
     props: {
       user: guard.user,
-      records: serialize(await getPleningScheduleList(userId)),
-      duePlenings: serialize(await getDuePleningNotifications(userId)),
+      records: serialize(await getPleningScheduleList()),
+      duePlenings: serialize(await getDuePleningNotifications()),
       today: todayDateString(),
       message: typeof context.query.message === "string" ? context.query.message : "",
     },

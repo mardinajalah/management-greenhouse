@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db/client";
 import { pleningSchedules } from "@/db/schema";
 import { canCompletePlening } from "@/lib/plening";
@@ -29,11 +29,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const [row] = await db
     .select()
     .from(pleningSchedules)
-    .where(and(eq(pleningSchedules.id, parsed.data.id), eq(pleningSchedules.userId, session.id)))
+    .where(eq(pleningSchedules.id, parsed.data.id))
     .limit(1);
 
   if (!row) {
     redirectWithMessage(res, "/user/monitorings/plening", "Jadwal plening tidak ditemukan.");
+    return;
+  }
+
+  if (row.status === "selesai") {
+    redirectWithMessage(
+      res,
+      "/user/monitorings/plening",
+      "Jadwal plening ini sudah diselesaikan sebelumnya.",
+    );
     return;
   }
 

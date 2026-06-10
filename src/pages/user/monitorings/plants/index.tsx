@@ -40,9 +40,10 @@ export default function UserPlantConditionsPage({ user, records, message }: Prop
 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
-              <thead>
+               <thead>
                 <tr className="bg-slate-50 text-slate-400 uppercase text-[11px] font-bold tracking-wider">
                   <th className="px-6 py-4">Tanggal</th>
+                  <th className="px-6 py-4">Oleh</th>
                   <th className="px-6 py-4">Jenis</th>
                   <th className="px-6 py-4">Usia</th>
                   <th className="px-6 py-4">Deskripsi</th>
@@ -50,12 +51,13 @@ export default function UserPlantConditionsPage({ user, records, message }: Prop
                   <th className="px-6 py-4 text-center">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+               <tbody className="divide-y divide-slate-100">
                 {records.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/50">
                     <td className="px-6 py-4 text-sm font-semibold text-slate-700">
                       {formatAttendanceDate(item.recordDate)}
                     </td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{item.userName}</td>
                     <td className="px-6 py-4 text-sm text-slate-700">{item.plantType}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{item.plantAge}</td>
                     <td className="px-6 py-4 text-sm text-slate-500 max-w-xs line-clamp-2">{item.description}</td>
@@ -92,7 +94,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   return {
     props: {
       user: guard.user,
-      records: serialize(await getPlantConditionList(guard.user.id)),
+      records: serialize(await getPlantConditionList()),
       message: typeof context.query.message === "string" ? context.query.message : "",
     },
   };
