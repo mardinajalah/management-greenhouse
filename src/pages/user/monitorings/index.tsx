@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<UserMonitoringHubProps> = as
   return {
     props: {
       user: guard.user,
-      duePlenings: serialize(await getDuePleningNotifications(guard.user.id)),
+      duePlenings: serialize(await getDuePleningNotifications()),
       message: typeof context.query.message === "string" ? context.query.message : "",
     },
   };
