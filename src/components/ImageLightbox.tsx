@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ClientPortal } from "@/components/ClientPortal";
 
 type ImageLightboxProps = {
   src: string;
@@ -37,28 +38,30 @@ export function ImageLightbox({
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
-          <button
-            type="button"
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            aria-label="Tutup gambar"
-            onClick={() => setOpen(false)}
-          />
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 text-lg"
-            aria-label="Tutup"
-          >
-            ✕
-          </button>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt={alt}
-            className="relative z-10 max-h-[90vh] max-w-full rounded-lg shadow-2xl object-contain"
-          />
-        </div>
+        <ClientPortal>
+          <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              aria-label="Tutup gambar"
+              onClick={() => setOpen(false)}
+            />
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 text-lg"
+              aria-label="Tutup"
+            >
+              ✕
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt={alt}
+              className="relative z-10 max-h-[90vh] max-w-full rounded-lg shadow-2xl object-contain"
+            />
+          </div>
+        </ClientPortal>
       ) : null}
     </>
   );
